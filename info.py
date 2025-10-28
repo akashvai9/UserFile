@@ -22,7 +22,7 @@ ADMINS = list(map(int, environ.get('ADMINS', '7285288195 5370676246').split())) 
 AUTH_CHANNEL = list(map(int, environ.get("AUTH_CHANNEL", "-1002735342037").split()))  # Allowed channels for authorization
 
 # username add without @
-OWNER_USERNAME = environ.get("OWNER_USERNAME",BOT'gmovies270')  # Owner's username
+OWNER_USERNAME = environ.get("OWNER_USERNAME", 'Ctgmovies270')  # Owner's username
 BOT_USERNAME = environ.get("BOT_USERNAME", 'CTGFileToLink_Bot')  # Bot's username
 
 # 🔗 Channel & Support Links
