@@ -47,7 +47,7 @@ SHORTLINK_URL = environ.get('SHORTLINK_URL', 'techvjlink.site')  # Shortener sit
 SHORTLINK_API = environ.get('SHORTLINK_API', 'd73e70a35dc3877fa14afbf51fa8ec312c94780c')  # API key for shortlink
 
 # 💾 MongoDB Connection Information
-DB_URL = environ.get('DATABASE_URI', "mongodb+srv://aman:aman@cluster0p1.mongodb.net/?rites=truity&appName=Cluster0")  # MongoDB connection URI
+DB_URL = environ.get('DATABASE_URI', "mongodb+srv://Filetolink270:Filetolink270@cluster0.tsr3api.mongodb.net/?appName=Cluster0")  # MongoDB connection URI
 DB_NAME = environ.get('DATABASE_NAME', "cluster0")  # MongoDB database name
 
 # 📸 all Media (Images)
