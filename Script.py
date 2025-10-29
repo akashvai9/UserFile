@@ -76,7 +76,7 @@ Nᴀᴍᴇ - {}</b>"""
     ABOUT_TXT = """<b>╔══❰ {} ❱═════❍
 ║╭━━━━━━━━━━━━━━━━━━➣
 ║┣⪼🤖ᴍʏ ɴᴀᴍᴇ : {}
-║┣⪼👦ᴅᴇᴠᴇʟᴏᴘᴇʀ : <a href='https://t.me/CineZoneBDBot>CTG ᴄʜᴀᴛ ᴏᴡɴᴇʀ</a>
+║┣⪼👦ᴅᴇᴠᴇʟᴏᴘᴇʀ : <a href='https://t.me/CineZoneBDBot'>CTG ᴄʜᴀᴛ ᴏᴡɴᴇʀ</a>
 ║┣⪼❣️ᴜᴘᴅᴀᴛᴇ : <a href=https://t.me/TGLinkBase>CTG ʙᴏᴛᴢ</a>
 ║┣⪼⏲️ʙᴏᴛ ᴜᴘᴛɪᴍᴇ :- {}
 ║┣⪼📡Hᴏsᴛᴇᴅ ᴏɴ : ᴋᴏʏᴇʙ 
