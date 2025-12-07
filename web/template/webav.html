@@ -105,13 +105,13 @@ h2 {
 
   <h2>{{file_name}}</h2>
 
-  <!-- TOP AD -->
+  <!-- ১. উপরের বিজ্ঞাপন (TOP AD) -->
   <div class="ad-box">
     <p style="color:#555; font-size:10px;">Advertisement</p>
     <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
   </div>
 
-  <!-- VIDEO PLAYER -->
+  <!-- ভিডিও প্লেয়ার -->
   <div class="video-wrapper">
     <video id="player" controls playsinline preload="metadata">
         <source src="{{file_url}}" type="video/mp4" />
@@ -119,23 +119,28 @@ h2 {
     </video>
   </div>
 
-  <!-- SLOW NET SOLUTION BUTTONS -->
+  <!-- বাটন সেকশন (VLC & MX) -->
   <div style="text-align: center; margin-top: 15px;">
-    <p style="font-size: 12px; color: #aaa; margin-bottom: 5px;">⚠️ Video buffering? Play in App for speed:</p>
+    <p style="font-size: 12px; color: #aaa; margin-bottom: 5px;">⚠️ Video buffering? Play in App:</p>
     <div class="btn-grid">
-        <!-- VLC Player Link -->
-        <a href="vlc://{{file_url}}" class="btn btn-vlc">🚀 Play in VLC</a>
+        <!-- VLC Player Link (Fixed for Android) -->
+        <a href="intent:{{file_url}}#Intent;package=org.videolan.vlc;type=video/*;end" class="btn btn-vlc">🚀 Play in VLC</a>
         
-        <!-- MX Player Link (Android Intent) -->
+        <!-- MX Player Link -->
         <a href="intent:{{file_url}}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end" class="btn btn-mx">⚡ Play in MX</a>
     </div>
   </div>
 
-  <!-- CHANNEL LINKS -->
+  <!-- টেলিগ্রাম বাটন -->
   <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn btn-telegram">📢 Join Main Channel</a>
   <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn btn-telegram">🔔 Join Updates Channel</a>
 
-  <!-- MIDDLE AD -->
+  <!-- ২. মাঝখানের বিজ্ঞাপন (MIDDLE AD) -->
+  <div class="ad-box">
+    <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
+  </div>
+
+  <!-- ৩. নিচের বিজ্ঞাপন (FOOTER AD - যুক্ত করা হয়েছে) -->
   <div class="ad-box">
     <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
   </div>
@@ -143,21 +148,15 @@ h2 {
   <div class="footer">Powered by AV Botz</div>
 </div>
 
-<!-- POP-UNDER AD -->
+<!-- ৪. পপ-আন্ডার বিজ্ঞাপন -->
 <script type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
 
 <!-- Scripts -->
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <script>
-    // Plyr সেটআপ
     const player = new Plyr('#player', {
         controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
         speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 2] }
-    });
-
-    // এরর হ্যান্ডলিং (যদি ভিডিও লোড না হয়)
-    player.on('error', () => {
-        alert("Video format not supported in browser. Please click 'Play in VLC' or 'Play in MX' button below.");
     });
 </script>
 
