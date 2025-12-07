@@ -5,195 +5,80 @@
 <title>{{file_name}} | Fast Stream</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Plyr CSS -->
-<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-
 <style>
-/* --- কালার ভেরিয়েবল --- */
-:root {
-  --primary-color: #00ffe5;
-  --bg-color: #0d0d0d;
-  --card-bg: #1a1a1a;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-.container { max-width: 800px; margin: auto; padding: 15px; }
-
-h2 {
-    font-size: 18px;
-    text-align: center;
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 15px;
-    color: #ddd;
-}
-
-/* ভিডিও প্লেয়ার ডিজাইন (আপডেট করা হয়েছে) */
-.video-wrapper { 
-  border-radius: 12px; 
-  overflow: hidden; 
-  border: 1px solid #333;
-  box-shadow: 0 4px 20px rgba(0, 255, 229, 0.1);
-  background: #000;
-  /* aspect-ratio সরিয়ে দেওয়া হয়েছে যাতে অটো সাইজ নেয় */
-  width: 100%;
-  height: auto;
-  min-height: 200px; /* লোড হওয়ার আগে যাতে একেবারে ছোট না দেখায় */
-}
-
-/* ভিডিও যাতে কন্টেইনারের বাইরে না যায় */
-video {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Plyr কাস্টমাইজেশন - অটো হাইট */
-.plyr {
-    height: auto !important;
-    width: 100%;
-}
-.plyr__video-wrapper {
-    height: auto !important;
-}
-
-/* বাটন ডিজাইন */
-.btn-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.btn { 
-  display: block; 
-  width: 100%; 
-  padding: 12px; 
-  text-align: center; 
-  font-weight: 600; 
-  border-radius: 8px; 
-  text-decoration: none; 
-  font-size: 14px;
-  transition: 0.2s;
-  border: none;
-  cursor: pointer;
-}
-.btn:active { transform: scale(0.96); }
-
-/* স্পেশাল অ্যাপ বাটন */
-.btn-vlc { background: #ff5722; color: white; }
-.btn-mx { background: #2196f3; color: white; }
-
-/* চ্যানেল বাটন */
-.btn-telegram { 
-    background: linear-gradient(45deg, #0088cc, #00bfff); 
-    color: white; 
-    margin-top: 10px;
-    box-shadow: 0 4px 10px rgba(0, 136, 204, 0.3);
-}
-
-/* অ্যাড বক্স */
-.ad-box { 
-  min-height: 50px;
-  padding: 5px; 
-  border-radius: 8px; 
-  margin: 15px 0; 
-  text-align: center; 
-  border: 1px dashed #333; 
-  background: var(--card-bg); 
-}
-
-.footer { text-align: center; margin-top: 30px; font-size: 11px; color: #555; }
-
-/* Plyr কালার */
-:root { --plyr-color-main: var(--primary-color); }
+    body {
+        background-color: #0d0d0d;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        margin: 0;
+        padding: 10px;
+        text-align: center;
+    }
+    .container { max-width: 600px; margin: auto; }
+    h2 { font-size: 16px; margin: 10px 0; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    /* ভিডিও প্লেয়ার */
+    video { width: 100%; border-radius: 8px; background: #000; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+    
+    /* বাটন */
+    .btn-container { display: flex; gap: 10px; margin-top: 15px; }
+    .btn { flex: 1; padding: 10px; border-radius: 5px; text-decoration: none; color: #fff; font-weight: bold; font-size: 13px; border: none; }
+    .vlc { background: #ff5722; }
+    .mx { background: #2196f3; }
+    .tg { background: #0088cc; display: block; margin-top: 10px; width: 100%; box-sizing: border-box; }
+    
+    /* বিজ্ঞাপন এরিয়া */
+    .ad-box { margin: 15px 0; padding: 5px; background: #1a1a1a; border-radius: 5px; min-height: 50px; }
+    .footer { font-size: 10px; color: #444; margin-top: 20px; }
 </style>
 </head>
-
 <body>
+
 <div class="container">
+    <h2>{{file_name}}</h2>
 
-  <h2>{{file_name}}</h2>
-
-  <!-- ১. উপরের বিজ্ঞাপন -->
-  <div class="ad-box">
-    <p style="color:#555; font-size:10px;">Advertisement</p>
-    <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
-  </div>
-
-  <!-- ভিডিও প্লেয়ার -->
-  <div class="video-wrapper">
-    <video id="player" controls crossorigin playsinline>
-    </video>
-  </div>
-
-  <!-- বাটন সেকশন -->
-  <div style="text-align: center; margin-top: 15px;">
-    <p style="font-size: 12px; color: #aaa; margin-bottom: 5px;">⚠️ Video buffering? Play in App:</p>
-    <div class="btn-grid">
-        <a href="intent:{{file_url}}#Intent;package=org.videolan.vlc;type=video/*;end" class="btn btn-vlc">🚀 Play in VLC</a>
-        <a href="intent:{{file_url}}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end" class="btn btn-mx">⚡ Play in MX</a>
+    <!-- বিজ্ঞাপন ১ -->
+    <div class="ad-box">
+        <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
     </div>
-  </div>
 
-  <!-- টেলিগ্রাম বাটন -->
-  <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn btn-telegram">📢 Join Main Channel</a>
-  <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn btn-telegram">🔔 Join Updates Channel</a>
+    <!-- নেটিভ ভিডিও প্লেয়ার (দ্রুত লোড হবে) -->
+    <video id="video" controls playsinline poster=""></video>
 
-  <!-- ২. মাঝখানের বিজ্ঞাপন -->
-  <div class="ad-box">
-    <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
-  </div>
+    <!-- বাটন -->
+    <div class="btn-container">
+        <a href="intent:{{file_url}}#Intent;package=org.videolan.vlc;type=video/*;end" class="btn vlc">🚀 VLC Player</a>
+        <a href="intent:{{file_url}}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end" class="btn mx">⚡ MX Player</a>
+    </div>
 
-  <!-- ৩. নিচের বিজ্ঞাপন -->
-  <div class="ad-box">
-    <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
-  </div>
+    <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn tg">📢 Join Main Channel</a>
 
-  <div class="footer">Powered by AV Botz</div>
+    <!-- বিজ্ঞাপন ২ -->
+    <div class="ad-box">
+        <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
+    </div>
+
+    <div class="footer">Powered by AV Botz</div>
 </div>
 
-<!-- ৪. পপ-আন্ডার বিজ্ঞাপন -->
+<!-- পপ-আন্ডার -->
 <script type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
 
-<!-- Scripts -->
+<!-- শুধু HLS স্ক্রিপ্ট (Plyr বাদ দেওয়া হয়েছে) -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const video = document.getElementById('player');
-        const source = "{{file_url}}";
+    var video = document.getElementById('video');
+    var videoSrc = "{{file_url}}";
 
-        // Plyr অপশন কনফিগারেশন
-        const defaultOptions = {
-            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
-            speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 2] },
-            ratio: null, // এটি null রাখলে ভিডিওর অরিজিনাল সাইজ অনুযায়ী প্লেয়ার সেট হবে (লম্বা বা চ্যাপ্টা)
-            resetOnEnd: true
-        };
-
-        if (Hls.isSupported() && (source.endsWith('.m3u8') || source.includes('.m3u8'))) {
-            const hls = new Hls();
-            hls.loadSource(source);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                new Plyr(video, defaultOptions);
-            });
-        } else {
-            video.src = source;
-            new Plyr(video, defaultOptions);
-        }
-    });
+    if (Hls.isSupported() && videoSrc.includes('.m3u8')) {
+        var hls = new Hls();
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoSrc;
+    } else {
+        video.src = videoSrc;
+    }
 </script>
 
 </body>
