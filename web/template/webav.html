@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>{{file_name}} | Fast Stream</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <!-- Plyr CSS -->
 <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
 <style>
+/* --- কালার ভেরিয়েবল --- */
 :root {
   --primary-color: #00ffe5;
   --bg-color: #0d0d0d;
@@ -25,55 +26,121 @@ body {
 }
 
 .container { max-width: 800px; margin: auto; padding: 15px; }
-h2 { font-size: 18px; text-align: center; margin-bottom: 15px; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.video-wrapper { border-radius: 12px; overflow: hidden; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0, 255, 229, 0.1); background: #000; aspect-ratio: 16/9; }
 
-.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-.btn { display: block; width: 100%; padding: 12px; text-align: center; font-weight: 600; border-radius: 8px; text-decoration: none; font-size: 14px; transition: 0.2s; border: none; cursor: pointer; }
+h2 {
+    font-size: 18px;
+    text-align: center;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 15px;
+    color: #ddd;
+}
+
+/* ভিডিও প্লেয়ার ডিজাইন */
+.video-wrapper { 
+  border-radius: 12px; 
+  overflow: hidden; 
+  border: 1px solid #333;
+  box-shadow: 0 4px 20px rgba(0, 255, 229, 0.1);
+  background: #000;
+  aspect-ratio: 16/9;
+}
+
+/* বাটন ডিজাইন */
+.btn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn { 
+  display: block; 
+  width: 100%; 
+  padding: 12px; 
+  text-align: center; 
+  font-weight: 600; 
+  border-radius: 8px; 
+  text-decoration: none; 
+  font-size: 14px;
+  transition: 0.2s;
+  border: none;
+  cursor: pointer;
+}
 .btn:active { transform: scale(0.96); }
+
+/* স্পেশাল অ্যাপ বাটন (For Slow Internet) */
 .btn-vlc { background: #ff5722; color: white; }
 .btn-mx { background: #2196f3; color: white; }
-.btn-telegram { background: linear-gradient(45deg, #0088cc, #00bfff); color: white; margin-top: 10px; box-shadow: 0 4px 10px rgba(0, 136, 204, 0.3); }
 
-.ad-box { min-height: 50px; padding: 5px; border-radius: 8px; margin: 15px 0; text-align: center; border: 1px dashed #333; background: var(--card-bg); }
+/* চ্যানেল বাটন */
+.btn-telegram { 
+    background: linear-gradient(45deg, #0088cc, #00bfff); 
+    color: white; 
+    margin-top: 10px;
+    box-shadow: 0 4px 10px rgba(0, 136, 204, 0.3);
+}
+
+/* অ্যাড বক্স */
+.ad-box { 
+  min-height: 50px;
+  padding: 5px; 
+  border-radius: 8px; 
+  margin: 15px 0; 
+  text-align: center; 
+  border: 1px dashed #333; 
+  background: var(--card-bg); 
+}
+
 .footer { text-align: center; margin-top: 30px; font-size: 11px; color: #555; }
 
+/* Plyr কাস্টমাইজেশন */
 :root { --plyr-color-main: var(--primary-color); }
 </style>
 </head>
-<body>
 
+<body>
 <div class="container">
+
   <h2>{{file_name}}</h2>
 
-  <!-- Top Ad -->
+  <!-- ১. উপরের বিজ্ঞাপন (TOP AD) -->
   <div class="ad-box">
     <p style="color:#555; font-size:10px;">Advertisement</p>
     <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
   </div>
 
-  <!-- Video Player -->
+  <!-- ভিডিও প্লেয়ার -->
   <div class="video-wrapper">
-    <video id="player" controls playsinline preload="auto"></video>
+    <!-- crossorigin এবং playsinline যুক্ত করা হয়েছে বেটার সাপোর্টের জন্য -->
+    <video id="player" controls crossorigin playsinline>
+        <!-- সোর্স জাভাস্ক্রিপ্ট দিয়ে লোড হবে সব ফরম্যাট সাপোর্টের জন্য -->
+    </video>
   </div>
 
-  <!-- VLC & MX Player -->
-  <div style="text-align:center; margin-top:15px;">
-    <p style="font-size:12px; color:#aaa; margin-bottom:5px;">⚠️ Video buffering? Play in App:</p>
+  <!-- বাটন সেকশন (VLC & MX) -->
+  <div style="text-align: center; margin-top: 15px;">
+    <p style="font-size: 12px; color: #aaa; margin-bottom: 5px;">⚠️ Video buffering? Play in App:</p>
     <div class="btn-grid">
+        <!-- VLC Player Link -->
         <a href="intent:{{file_url}}#Intent;package=org.videolan.vlc;type=video/*;end" class="btn btn-vlc">🚀 Play in VLC</a>
+        
+        <!-- MX Player Link -->
         <a href="intent:{{file_url}}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end" class="btn btn-mx">⚡ Play in MX</a>
     </div>
   </div>
 
-  <!-- Telegram Buttons -->
+  <!-- টেলিগ্রাম বাটন -->
   <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn btn-telegram">📢 Join Main Channel</a>
   <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn btn-telegram">🔔 Join Updates Channel</a>
 
-  <!-- Middle & Footer Ads -->
+  <!-- ২. মাঝখানের বিজ্ঞাপন (MIDDLE AD) -->
   <div class="ad-box">
     <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
   </div>
+
+  <!-- ৩. নিচের বিজ্ঞাপন (FOOTER AD) -->
   <div class="ad-box">
     <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
   </div>
@@ -81,30 +148,40 @@ h2 { font-size: 18px; text-align: center; margin-bottom: 15px; color: #ddd; whit
   <div class="footer">Powered by AV Botz</div>
 </div>
 
-<!-- Plyr + HLS.js -->
+<!-- ৪. পপ-আন্ডার বিজ্ঞাপন -->
+<script type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
+
+<!-- Scripts -->
+<!-- HLS.js লাইব্রেরি যুক্ত করা হয়েছে স্মুথ স্ট্রিমিং এর জন্য -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
+
 <script>
-const video = document.getElementById('player');
-const source = "{{file_url}}";
+    document.addEventListener('DOMContentLoaded', () => {
+        const video = document.getElementById('player');
+        // এখানে আপনার ফাইলের লিংক আসবে
+        const source = "{{file_url}}";
 
-// Detect format
-if(Hls.isSupported() && source.endsWith('.m3u8')) {
-    // HLS streaming
-    const hls = new Hls();
-    hls.loadSource(source);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED,function() { video.play(); });
-} else {
-    // Direct play for MP4/WEBM/AVI etc.
-    video.src = source;
-}
+        const defaultOptions = {
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+            speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 2] }
+        };
 
-// Initialize Plyr
-const player = new Plyr('#player', {
-    controls: ['play-large','play','progress','current-time','mute','volume','fullscreen'],
-    speed: { selected:1, options:[0.5,0.75,1,1.25,1.5,2] }
-});
+        // যদি ব্রাউজার HLS সাপোর্ট করে (যেমন m3u8 ফরম্যাট)
+        if (Hls.isSupported() && (source.endsWith('.m3u8') || source.includes('.m3u8'))) {
+            const hls = new Hls();
+            hls.loadSource(source);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                // HLS লোড হলে Plyr চালু হবে
+                new Plyr(video, defaultOptions);
+            });
+        } else {
+            // সাধারণ MP4, MKV বা অন্যান্য ভিডিও ফাইলের জন্য
+            video.src = source;
+            new Plyr(video, defaultOptions);
+        }
+    });
 </script>
 
 </body>
