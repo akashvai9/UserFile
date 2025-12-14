@@ -14,11 +14,40 @@
         padding: 10px;
         text-align: center;
     }
-    .container { max-width: 600px; margin: auto; }
+    .container { max-width: 600px; margin: auto; position: relative; }
     h2 { font-size: 16px; margin: 10px 0; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    /* ভিডিও প্লেয়ার */
-    video { width: 100%; aspect-ratio: 16/9; border-radius: 8px; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.7); }
+    /* ভিডিও প্লেয়ার কন্টেইনার */
+    .video-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #000;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+        overflow: hidden;
+    }
+    
+    video { width: 100%; height: 100%; object-fit: contain; }
+
+    /* কাস্টম লোডার */
+    #loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        display: none; /* ডিফল্ট হাইড থাকবে */
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
     
     /* বাটন */
     .btn-container { display: flex; gap: 10px; margin-top: 15px; }
@@ -42,8 +71,11 @@
         <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
     </div>
 
-    <!-- ভিডিও প্লেয়ার: preload='metadata' সার্ভার লোড কমাবে -->
-    <video id="video" controls playsinline preload="metadata" poster="{{file_thumb}}"></video>
+    <!-- ভিডিও প্লেয়ার সেকশন -->
+    <div class="video-wrapper">
+        <div id="loader"></div>
+        <video id="video" controls playsinline poster="{{file_thumb}}"></video>
+    </div>
 
     <!-- বাটন -->
     <div class="btn-container">
@@ -64,21 +96,41 @@
 <script type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
 
 <!-- HLS Script -->
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
 <script>
     var video = document.getElementById('video');
     var videoSrc = "{{file_url}}";
+    var loader = document.getElementById('loader');
+
+    // লোডার দেখানোর ফাংশন
+    function showLoader() { loader.style.display = 'block'; }
+    function hideLoader() { loader.style.display = 'none'; }
+
+    video.addEventListener('waiting', showLoader);
+    video.addEventListener('playing', hideLoader);
+    video.addEventListener('canplay', hideLoader);
 
     if (Hls.isSupported() && videoSrc.includes('.m3u8')) {
-        // ফাস্ট লোডিং কনফিগারেশন
         var config = {
+            debug: false,
             autoStartLoad: true,
-            startLevel: -1, // অটোমেটিক কোয়ালিটি ডিটেকশন
-            capLevelToPlayerSize: true, // মোবাইল স্ক্রিন অনুযায়ী রেজোলিউশন সেট হবে (ডেটা বাঁচাবে)
-            maxBufferLength: 30, // ৩০ সেকেন্ড বাফার করে রাখবে
-            maxMaxBufferLength: 600,
-            maxBufferHole: 0.5, // বাফারিং আটকাতে সাহায্য করবে
-            enableWorker: true, // মাল্টি-থ্রেডিং ব্যবহার করে লোড ফাস্ট করবে
+            startLevel: -1,
+            // বাফার অপ্টিমাইজেশন (গুরুত্বপূর্ণ পরিবর্তন)
+            maxBufferLength: 30, 
+            maxMaxBufferLength: 60, // মেমোরি কম খাওয়ার জন্য কমানো হলো
+            maxBufferHole: 0.5,
+            
+            // নেটওয়ার্ক রিকভারি অপশন
+            manifestLoadingTimeOut: 10000,
+            manifestLoadingMaxRetry: 3,
+            levelLoadingTimeOut: 10000,
+            levelLoadingMaxRetry: 3,
+            fragLoadingTimeOut: 20000,
+            fragLoadingMaxRetry: 3,
+            
+            // ভিডিও আটকে গেলে স্কিপ করার জন্য
+            nudgeOffset: 0.1,
+            nudgeMaxRetry: 5,
         };
 
         var hls = new Hls(config);
@@ -86,23 +138,25 @@
         hls.attachMedia(video);
         
         hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            // অটো প্লে চাইলে নিচের লাইনটি আনকমেন্ট করুন, তবে ব্রাউজার পলিসির কারণে মিউট ছাড়া অটো প্লে হয় না
-            // video.play(); 
+            // সাউন্ড মিউট করে অটো প্লে (ব্রাউজার পলিসি মানার জন্য)
+            // video.muted = true; 
+            // video.play().catch(e => console.log("Auto-play blocked"));
         });
 
-        // এরর হ্যান্ডলিং (ভিডিও আটকে গেলে রিকভার করবে)
+        // এরর হ্যান্ডলিং এবং অটো-রিকভারি
         hls.on(Hls.Events.ERROR, function (event, data) {
             if (data.fatal) {
                 switch (data.type) {
                 case Hls.ErrorTypes.NETWORK_ERROR:
-                    console.log("network error, recovering...");
+                    console.log("Network error, trying to recover...");
                     hls.startLoad();
                     break;
                 case Hls.ErrorTypes.MEDIA_ERROR:
-                    console.log("media error, recovering...");
+                    console.log("Media error, trying to recover...");
                     hls.recoverMediaError();
                     break;
                 default:
+                    console.log("Fatal error, destroying player.");
                     hls.destroy();
                     break;
                 }
@@ -110,8 +164,13 @@
         });
 
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // iOS বা Safari এর জন্য
         video.src = videoSrc;
+        video.addEventListener('loadedmetadata', function() {
+             // video.play();
+        });
     } else {
+        // সাধারণ ভিডিও ফাইল (.mp4)
         video.src = videoSrc;
     }
 </script>
