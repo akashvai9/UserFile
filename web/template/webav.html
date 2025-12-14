@@ -57,13 +57,13 @@
     .mx { background: #2196f3; }
     .tg { background: #0088cc; display: block; margin-top: 10px; width: 100%; box-sizing: border-box; }
     
-    /* বিজ্ঞাপনের জায়গা (খালি থাকবে শুরুতে) */
+    /* বিজ্ঞাপনের জায়গা */
     .ad-box { 
         margin: 15px 0; 
         padding: 0; 
-        background: #1a1a1a; 
+        background: transparent; /* ব্যাকগ্রাউন্ড কালো না রেখে ট্রান্সপারেন্ট রাখা ভালো */
         border-radius: 5px; 
-        min-height: 60px; /* হাইট ফিক্সড যাতে লেআউট না ভাঙ্গে */
+        min-height: 50px; 
         display: flex; 
         justify-content: center; 
         align-items: center;
@@ -78,8 +78,10 @@
 <div class="container">
     <h2>{{file_name}}</h2>
 
-    <!-- বিজ্ঞাপন ১ (এখানে স্ক্রিপ্ট নেই, আইডি দেওয়া আছে) -->
-    <div id="ad-top" class="ad-box"></div>
+    <!-- বিজ্ঞাপন ১ (উপরে) - সরাসরি কোড বসানো হয়েছে -->
+    <div class="ad-box">
+        <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
+    </div>
 
     <!-- ভিডিও প্লেয়ার -->
     <div class="video-wrapper">
@@ -95,14 +97,16 @@
 
     <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn tg">📢 Join Main Channel</a>
 
-    <!-- বিজ্ঞাপন ২ -->
-    <div id="ad-bottom" class="ad-box"></div>
+    <!-- বিজ্ঞাপন ২ (নিচে) - সরাসরি কোড বসানো হয়েছে -->
+    <div class="ad-box">
+        <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
+    </div>
 
     <div class="footer">Powered by AV Botz</div>
 </div>
 
-<!-- পপ-আন্ডার বিজ্ঞাপনের জন্য কন্টেইনার -->
-<div id="pop-ad"></div>
+<!-- পপ-আন্ডার বিজ্ঞাপন (সবার শেষে) -->
+<script type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
 
 <!-- HLS Script -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
@@ -135,36 +139,8 @@
         video.src = videoSrc;
         video.addEventListener('loadedmetadata', hideLoader);
     }
-
-    // --- বিজ্ঞাপন লোডিং সিস্টেম (Lazy Load) ---
-    function loadAdsNow() {
-        console.log("Loading Ads...");
-
-        // বিজ্ঞাপন ১ (Top)
-        var adTop = document.createElement('script');
-        adTop.type = 'text/javascript';
-        adTop.src = '//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js';
-        document.getElementById('ad-top').appendChild(adTop);
-
-        // বিজ্ঞাপন ২ (Bottom)
-        var adBottom = document.createElement('script');
-        adBottom.type = 'text/javascript';
-        adBottom.src = '//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js';
-        document.getElementById('ad-bottom').appendChild(adBottom);
-
-        // পপ-আন্ডার (Pop-under)
-        var popAd = document.createElement('script');
-        popAd.type = 'text/javascript';
-        popAd.src = '//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js';
-        document.body.appendChild(popAd);
-    }
-
-    // পেজ লোড হওয়ার ৩ সেকেন্ড পর বিজ্ঞাপন লোড হবে
-    // আপনি চাইলে 3000 এর জায়গায় 1000 (১ সেকেন্ড) বা 5000 (৫ সেকেন্ড) দিতে পারেন
-    window.addEventListener('load', function() {
-        setTimeout(loadAdsNow, 3000); 
-    });
-
+    
+    // বিজ্ঞাপন লোডিং এর স্ক্রিপ্ট এখান থেকে মুছে ফেলা হয়েছে কারণ আমরা HTML এ সরাসরি দিয়েছি।
 </script>
 
 </body>
