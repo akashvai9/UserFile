@@ -17,7 +17,7 @@
     .container { max-width: 600px; margin: auto; position: relative; }
     h2 { font-size: 16px; margin: 10px 0; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    /* ভিডিও প্লেয়ার স্টাইল */
+    /* ভিডিও প্লেয়ার */
     .video-wrapper {
         position: relative;
         width: 100%;
@@ -30,7 +30,7 @@
     
     video { width: 100%; height: 100%; object-fit: contain; }
 
-    /* লোডিং স্পিনার (ভিডিও লোড হওয়ার সময় দেখাবে) */
+    /* লোডার */
     #loader {
         position: absolute;
         top: 50%;
@@ -43,8 +43,8 @@
         height: 40px;
         animation: spin 0.8s linear infinite;
         display: none;
-        z-index: 10;
         pointer-events: none;
+        z-index: 10;
     }
 
     @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -57,7 +57,19 @@
     .mx { background: #2196f3; }
     .tg { background: #0088cc; display: block; margin-top: 10px; width: 100%; box-sizing: border-box; }
     
-    .ad-box { margin: 15px 0; padding: 5px; background: #1a1a1a; border-radius: 5px; min-height: 50px; display: flex; justify-content: center; align-items: center; color: #444; font-size: 12px; }
+    /* বিজ্ঞাপনের জায়গা (খালি থাকবে শুরুতে) */
+    .ad-box { 
+        margin: 15px 0; 
+        padding: 0; 
+        background: #1a1a1a; 
+        border-radius: 5px; 
+        min-height: 60px; /* হাইট ফিক্সড যাতে লেআউট না ভাঙ্গে */
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        overflow: hidden;
+    }
+    
     .footer { font-size: 10px; color: #444; margin-top: 20px; }
 </style>
 </head>
@@ -66,10 +78,8 @@
 <div class="container">
     <h2>{{file_name}}</h2>
 
-    <!-- বিজ্ঞাপন ১ (Async যুক্ত করা হয়েছে) -->
-    <div class="ad-box">
-        <script async type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
-    </div>
+    <!-- বিজ্ঞাপন ১ (এখানে স্ক্রিপ্ট নেই, আইডি দেওয়া আছে) -->
+    <div id="ad-top" class="ad-box"></div>
 
     <!-- ভিডিও প্লেয়ার -->
     <div class="video-wrapper">
@@ -85,87 +95,76 @@
 
     <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn tg">📢 Join Main Channel</a>
 
-    <!-- বিজ্ঞাপন ২ (Async যুক্ত করা হয়েছে) -->
-    <div class="ad-box">
-        <script async type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
-    </div>
+    <!-- বিজ্ঞাপন ২ -->
+    <div id="ad-bottom" class="ad-box"></div>
 
     <div class="footer">Powered by AV Botz</div>
 </div>
 
-<!-- পপ-আন্ডার বা অন্য বিজ্ঞাপনের জন্য (Async) -->
-<script async type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
+<!-- পপ-আন্ডার বিজ্ঞাপনের জন্য কন্টেইনার -->
+<div id="pop-ad"></div>
 
 <!-- HLS Script -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
+
 <script>
+    // --- ভিডিও প্লেয়ার কনফিগারেশন ---
     var video = document.getElementById('video');
     var videoSrc = "{{file_url}}";
     var loader = document.getElementById('loader');
 
-    // লোডার ম্যানেজমেন্ট
     function showLoader() { loader.style.display = 'block'; }
     function hideLoader() { loader.style.display = 'none'; }
 
     video.addEventListener('waiting', showLoader);
     video.addEventListener('playing', hideLoader);
     video.addEventListener('canplay', hideLoader);
-    
-    // ভিডিও লোড শুরু করার আগে লোডার দেখান
     showLoader();
 
     if (Hls.isSupported() && videoSrc.includes('.m3u8')) {
-        var config = {
+        var hls = new Hls({
             autoStartLoad: true,
-            startLevel: -1,
-            // বাফার টিউনিং: ফাস্ট স্টার্টের জন্য
             maxBufferLength: 30,
             maxMaxBufferLength: 60,
-            maxBufferHole: 0.5,
-            
-            // নেটওয়ার্ক টাইমআউট কমানো হয়েছে যাতে আটকে না থাকে
-            manifestLoadingTimeOut: 5000, 
-            fragLoadingTimeOut: 10000,
-        };
-
-        var hls = new Hls(config);
+            manifestLoadingTimeOut: 5000,
+        });
         hls.loadSource(videoSrc);
         hls.attachMedia(video);
-        
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            hideLoader();
-            // অটো প্লে চেষ্টা (মিউট করে)
-            // video.muted = true;
-            // video.play().catch(() => console.log('Autoplay prevented'));
-        });
-
-        // এরর রিকভারি
-        hls.on(Hls.Events.ERROR, function (event, data) {
-            if (data.fatal) {
-                switch (data.type) {
-                case Hls.ErrorTypes.NETWORK_ERROR:
-                    console.log("Network error, retrying...");
-                    hls.startLoad();
-                    break;
-                case Hls.ErrorTypes.MEDIA_ERROR:
-                    console.log("Media error, recovering...");
-                    hls.recoverMediaError();
-                    break;
-                default:
-                    hls.destroy();
-                    break;
-                }
-            }
-        });
-
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        // iOS সাপোর্ট
-        video.src = videoSrc;
-        video.addEventListener('loadedmetadata', hideLoader);
+        hls.on(Hls.Events.MANIFEST_PARSED, hideLoader);
     } else {
         video.src = videoSrc;
-        video.addEventListener('canplay', hideLoader);
+        video.addEventListener('loadedmetadata', hideLoader);
     }
+
+    // --- বিজ্ঞাপন লোডিং সিস্টেম (Lazy Load) ---
+    function loadAdsNow() {
+        console.log("Loading Ads...");
+
+        // বিজ্ঞাপন ১ (Top)
+        var adTop = document.createElement('script');
+        adTop.type = 'text/javascript';
+        adTop.src = '//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js';
+        document.getElementById('ad-top').appendChild(adTop);
+
+        // বিজ্ঞাপন ২ (Bottom)
+        var adBottom = document.createElement('script');
+        adBottom.type = 'text/javascript';
+        adBottom.src = '//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js';
+        document.getElementById('ad-bottom').appendChild(adBottom);
+
+        // পপ-আন্ডার (Pop-under)
+        var popAd = document.createElement('script');
+        popAd.type = 'text/javascript';
+        popAd.src = '//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js';
+        document.body.appendChild(popAd);
+    }
+
+    // পেজ লোড হওয়ার ৩ সেকেন্ড পর বিজ্ঞাপন লোড হবে
+    // আপনি চাইলে 3000 এর জায়গায় 1000 (১ সেকেন্ড) বা 5000 (৫ সেকেন্ড) দিতে পারেন
+    window.addEventListener('load', function() {
+        setTimeout(loadAdsNow, 3000); 
+    });
+
 </script>
 
 </body>
