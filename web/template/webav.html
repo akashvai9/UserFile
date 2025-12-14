@@ -17,7 +17,7 @@
     .container { max-width: 600px; margin: auto; position: relative; }
     h2 { font-size: 16px; margin: 10px 0; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    /* ভিডিও প্লেয়ার কন্টেইনার */
+    /* ভিডিও প্লেয়ার স্টাইল */
     .video-wrapper {
         position: relative;
         width: 100%;
@@ -30,19 +30,19 @@
     
     video { width: 100%; height: 100%; object-fit: contain; }
 
-    /* কাস্টম লোডার */
+    /* লোডিং স্পিনার (ভিডিও লোড হওয়ার সময় দেখাবে) */
     #loader {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3498db;
+        border: 4px solid #333;
+        border-top: 4px solid #2196f3;
         border-radius: 50%;
         width: 40px;
         height: 40px;
-        animation: spin 1s linear infinite;
-        display: none; /* ডিফল্ট হাইড থাকবে */
+        animation: spin 0.8s linear infinite;
+        display: none;
         z-index: 10;
         pointer-events: none;
     }
@@ -51,13 +51,13 @@
     
     /* বাটন */
     .btn-container { display: flex; gap: 10px; margin-top: 15px; }
-    .btn { flex: 1; padding: 12px; border-radius: 5px; text-decoration: none; color: #fff; font-weight: bold; font-size: 14px; border: none; transition: 0.2s; }
+    .btn { flex: 1; padding: 12px; border-radius: 5px; text-decoration: none; color: #fff; font-weight: bold; font-size: 14px; border: none; transition: 0.2s; background: #333; }
     .btn:active { transform: scale(0.98); }
     .vlc { background: #ff5722; }
     .mx { background: #2196f3; }
     .tg { background: #0088cc; display: block; margin-top: 10px; width: 100%; box-sizing: border-box; }
     
-    .ad-box { margin: 15px 0; padding: 5px; background: #1a1a1a; border-radius: 5px; min-height: 50px; }
+    .ad-box { margin: 15px 0; padding: 5px; background: #1a1a1a; border-radius: 5px; min-height: 50px; display: flex; justify-content: center; align-items: center; color: #444; font-size: 12px; }
     .footer { font-size: 10px; color: #444; margin-top: 20px; }
 </style>
 </head>
@@ -66,12 +66,12 @@
 <div class="container">
     <h2>{{file_name}}</h2>
 
-    <!-- বিজ্ঞাপন ১ -->
+    <!-- বিজ্ঞাপন ১ (Async যুক্ত করা হয়েছে) -->
     <div class="ad-box">
-        <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
+        <script async type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
     </div>
 
-    <!-- ভিডিও প্লেয়ার সেকশন -->
+    <!-- ভিডিও প্লেয়ার -->
     <div class="video-wrapper">
         <div id="loader"></div>
         <video id="video" controls playsinline poster="{{file_thumb}}"></video>
@@ -85,15 +85,16 @@
 
     <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn tg">📢 Join Main Channel</a>
 
-    <!-- বিজ্ঞাপন ২ -->
+    <!-- বিজ্ঞাপন ২ (Async যুক্ত করা হয়েছে) -->
     <div class="ad-box">
-        <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
+        <script async type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
     </div>
 
     <div class="footer">Powered by AV Botz</div>
 </div>
 
-<script type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
+<!-- পপ-আন্ডার বা অন্য বিজ্ঞাপনের জন্য (Async) -->
+<script async type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
 
 <!-- HLS Script -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
@@ -102,35 +103,29 @@
     var videoSrc = "{{file_url}}";
     var loader = document.getElementById('loader');
 
-    // লোডার দেখানোর ফাংশন
+    // লোডার ম্যানেজমেন্ট
     function showLoader() { loader.style.display = 'block'; }
     function hideLoader() { loader.style.display = 'none'; }
 
     video.addEventListener('waiting', showLoader);
     video.addEventListener('playing', hideLoader);
     video.addEventListener('canplay', hideLoader);
+    
+    // ভিডিও লোড শুরু করার আগে লোডার দেখান
+    showLoader();
 
     if (Hls.isSupported() && videoSrc.includes('.m3u8')) {
         var config = {
-            debug: false,
             autoStartLoad: true,
             startLevel: -1,
-            // বাফার অপ্টিমাইজেশন (গুরুত্বপূর্ণ পরিবর্তন)
-            maxBufferLength: 30, 
-            maxMaxBufferLength: 60, // মেমোরি কম খাওয়ার জন্য কমানো হলো
+            // বাফার টিউনিং: ফাস্ট স্টার্টের জন্য
+            maxBufferLength: 30,
+            maxMaxBufferLength: 60,
             maxBufferHole: 0.5,
             
-            // নেটওয়ার্ক রিকভারি অপশন
-            manifestLoadingTimeOut: 10000,
-            manifestLoadingMaxRetry: 3,
-            levelLoadingTimeOut: 10000,
-            levelLoadingMaxRetry: 3,
-            fragLoadingTimeOut: 20000,
-            fragLoadingMaxRetry: 3,
-            
-            // ভিডিও আটকে গেলে স্কিপ করার জন্য
-            nudgeOffset: 0.1,
-            nudgeMaxRetry: 5,
+            // নেটওয়ার্ক টাইমআউট কমানো হয়েছে যাতে আটকে না থাকে
+            manifestLoadingTimeOut: 5000, 
+            fragLoadingTimeOut: 10000,
         };
 
         var hls = new Hls(config);
@@ -138,25 +133,25 @@
         hls.attachMedia(video);
         
         hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            // সাউন্ড মিউট করে অটো প্লে (ব্রাউজার পলিসি মানার জন্য)
-            // video.muted = true; 
-            // video.play().catch(e => console.log("Auto-play blocked"));
+            hideLoader();
+            // অটো প্লে চেষ্টা (মিউট করে)
+            // video.muted = true;
+            // video.play().catch(() => console.log('Autoplay prevented'));
         });
 
-        // এরর হ্যান্ডলিং এবং অটো-রিকভারি
+        // এরর রিকভারি
         hls.on(Hls.Events.ERROR, function (event, data) {
             if (data.fatal) {
                 switch (data.type) {
                 case Hls.ErrorTypes.NETWORK_ERROR:
-                    console.log("Network error, trying to recover...");
+                    console.log("Network error, retrying...");
                     hls.startLoad();
                     break;
                 case Hls.ErrorTypes.MEDIA_ERROR:
-                    console.log("Media error, trying to recover...");
+                    console.log("Media error, recovering...");
                     hls.recoverMediaError();
                     break;
                 default:
-                    console.log("Fatal error, destroying player.");
                     hls.destroy();
                     break;
                 }
@@ -164,14 +159,12 @@
         });
 
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        // iOS বা Safari এর জন্য
+        // iOS সাপোর্ট
         video.src = videoSrc;
-        video.addEventListener('loadedmetadata', function() {
-             // video.play();
-        });
+        video.addEventListener('loadedmetadata', hideLoader);
     } else {
-        // সাধারণ ভিডিও ফাইল (.mp4)
         video.src = videoSrc;
+        video.addEventListener('canplay', hideLoader);
     }
 </script>
 
