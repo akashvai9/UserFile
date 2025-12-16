@@ -70,7 +70,7 @@ MAX_FILES = int(environ.get("MAX_FILES", "5"))  # Max files allowed per user
 VERIFY_EXPIRE = int(environ.get('VERIFY_EXPIRE', 60))  # Time (in hours) after which verification expires
 
 # ⚙️ Worker Configuration
-WORKERS = int(getenv('WORKERS', '10'))  # Number of async workers
+WORKERS = int(getenv('WORKERS', '4'))  # Number of async workers
 MULTI_CLIENT = True  # Enable multi-client handling (if needed)
 
 # 🔧 App/Heroku Configuration
