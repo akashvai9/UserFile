@@ -6,251 +6,291 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
     :root {
-        --bg-color: #080a0f;
-        --card-bg: rgba(28, 28, 35, 0.8);
-        --text-color: #f0f0f0;
+        --bg-color: #030509;
+        --accent-glow: rgba(0, 210, 255, 0.15);
         --accent-color: #00d2ff;
-        --btn-vlc: linear-gradient(135deg, #FF8C00, #e67e22);
-        --btn-mx: linear-gradient(135deg, #00c6ff, #0072ff);
-        --btn-dl: linear-gradient(135deg, #2ecc71, #27ae60);
-        --btn-tg: linear-gradient(135deg, #3498db, #2980b9);
-        --glass-border: rgba(255, 255, 255, 0.1);
+        --text-main: #ffffff;
+        --text-dim: #b0b3b8;
+        --card-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        
+        /* Premium Button Gradients */
+        --vlc-grad: linear-gradient(135deg, #FF9500 0%, #FF5E00 100%);
+        --mx-grad: linear-gradient(135deg, #007AFF 0%, #00C6FF 100%);
+        --dl-grad: linear-gradient(135deg, #1D976C 0%, #93F9B9 100%);
+        --tg-grad: linear-gradient(135deg, #37aee2 0%, #1e96c8 100%);
+        --dev-grad: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);
     }
 
     body {
         background-color: var(--bg-color);
-        background-image: radial-gradient(circle at top right, #1a1e2e, #080a0f);
-        color: var(--text-color);
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-image: 
+            radial-gradient(circle at 0% 0%, rgba(0, 118, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 100% 100%, rgba(142, 45, 226, 0.1) 0%, transparent 50%);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
         margin: 0;
-        padding: 15px;
+        padding: 10px;
         display: flex;
         justify-content: center;
         min-height: 100vh;
+        overflow-x: hidden;
     }
 
     .container {
         width: 100%;
-        max-width: 550px;
+        max-width: 500px;
         display: flex;
         flex-direction: column;
-        gap: 20px;
-        animation: fadeIn 0.8s ease-out;
+        gap: 15px;
+        animation: fadeIn 1s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
+        from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
-    h2 {
-        font-size: 18px;
-        font-weight: 600;
-        color: #fff;
-        margin: 10px 0;
-        text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
-    
-    /* প্রিমিয়াম ভিডিও প্লেয়ার */
+    /* ১. ভিডিও প্লেয়ার (সবার উপরে) */
     .video-wrapper {
         position: relative;
         width: 100%;
         aspect-ratio: 16/9;
         background: #000;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow);
         overflow: hidden;
         border: 1px solid var(--glass-border);
     }
     
     video { width: 100%; height: 100%; object-fit: contain; }
 
-    /* মডার্ন লোডার */
-    #loader {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 50px;
-        height: 50px;
-        border: 3px solid rgba(0, 210, 255, 0.1);
-        border-top: 3px solid var(--accent-color);
-        border-radius: 50%;
-        animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-        display: none;
-        z-index: 10;
+    /* ২. প্রিমিয়াম ইনফো বক্স (প্লেয়ারের নিচে) */
+    .premium-info-box {
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 18px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-    @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-    
-    /* বাটন স্টাইল */
-    .btn-container {
+
+    .file-name-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        text-align: center;
+        border-bottom: 1px solid var(--glass-border);
+        padding-bottom: 10px;
+    }
+
+    .meta-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .meta-item {
+        background: rgba(255,255,255,0.02);
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.05);
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        align-items: flex-start;
     }
 
-    .player-row {
-        display: flex;
-        gap: 12px;
+    .meta-item span {
+        font-size: 9px;
+        text-transform: uppercase;
+        color: var(--accent-color);
+        letter-spacing: 1.2px;
+        margin-bottom: 4px;
+        font-weight: 800;
     }
 
-    .btn {
+    .meta-item p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--text-dim);
+        font-weight: 500;
+    }
+
+    /* ৩. বাটন সেকশন */
+    .btn-group { display: flex; flex-direction: column; gap: 12px; }
+    .row { display: flex; gap: 12px; }
+
+    .premium-btn {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 15px;
-        border-radius: 12px;
+        border-radius: 15px;
         text-decoration: none;
         color: #fff;
         font-weight: 600;
-        font-size: 15px;
-        border: 1px solid rgba(255,255,255,0.05);
+        font-size: 14px;
+        border: 1px solid rgba(255,255,255,0.1);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        position: relative;
         overflow: hidden;
     }
-    
-    .btn::after {
-        content: '';
+
+    .premium-btn::before {
+        content: "";
         position: absolute;
         top: 0; left: -100%;
         width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: 0.5s;
+        background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.6s;
     }
 
-    .btn:hover::after { left: 100%; }
+    .premium-btn:hover::before { left: 100%; }
+    .premium-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); filter: brightness(1.1); }
 
-    .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        filter: brightness(1.1);
+    .vlc { background: var(--vlc-grad); flex: 1; }
+    .mx { background: var(--mx-grad); flex: 1; }
+    .download { background: var(--dl-grad); font-size: 16px; text-transform: uppercase; letter-spacing: 1px; color: #000; font-weight: 800; }
+    .telegram { background: var(--tg-grad); }
+    .developer { background: var(--dev-grad); }
+
+    .premium-btn i { font-size: 18px; margin-right: 8px; font-style: normal; }
+
+    /* ৪. বিজ্ঞাপন সেকশন */
+    .ad-container {
+        margin-top: 10px;
+        padding-top: 15px;
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
     }
 
-    .btn:active { transform: translateY(0); }
-    .btn i { margin-right: 10px; font-style: normal; font-size: 20px; }
+    .ad-label { font-size: 9px; text-align: center; color: #444; text-transform: uppercase; letter-spacing: 2px; }
 
-    /* আলাদা আলাদা কালার */
-    .vlc { background: var(--btn-vlc); flex: 1; }
-    .mx { background: var(--btn-mx); flex: 1; }
-    
-    .download-btn {
-        background: var(--btn-dl);
+    .native-box { 
         width: 100%;
-        font-size: 16px;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-top: 5px;
-    }
-    
-    .tg { 
-        background: var(--btn-tg); 
-        width: 100%; 
-        font-size: 14px;
-        opacity: 0.9;
-    }
-
-    /* বিজ্ঞাপন বক্স */
-    .ad-box { 
-        width: 100%;
-        background: rgba(255,255,255,0.03);
-        border-radius: 12px; 
-        min-height: 60px; 
-        display: flex; 
-        justify-content: center; 
+        background: rgba(255,255,255,0.01);
+        border-radius: 18px; 
+        min-height: 120px; 
+        display: flex;
+        justify-content: center;
         align-items: center;
-        overflow: hidden;
         border: 1px dashed var(--glass-border);
     }
-    
-    .footer { 
-        font-size: 12px; 
-        color: #666; 
-        margin-top: 20px; 
-        text-align: center; 
-        letter-spacing: 1px;
-    }
 
-    /* মোবাইল অপ্টিমাইজেশন */
-    @media (max-width: 400px) {
-        .btn { padding: 12px; font-size: 14px; }
-        h2 { font-size: 15px; }
+    .footer { font-size: 11px; color: #444; text-align: center; margin-bottom: 20px; }
+
+    #loader {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 45px; height: 45px;
+        border: 4px solid rgba(0, 210, 255, 0.1);
+        border-top: 4px solid var(--accent-color);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        display: none; z-index: 10;
     }
+    @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>{{file_name}}</h2>
 
-    <!-- বিজ্ঞাপন ১ -->
-    <div class="ad-box">
-         <script
-  type="text/javascript"
-  src="https://pl21423250.effectivegatecpm.com/1d/c3/f8/1dc3f8acdb14ff956d47dfdf409aaeeb.js"
-></script>
-    </div>
-
-    <!-- ভিডিও প্লেয়ার -->
+    <!-- ভিডিও প্লেয়ার (সবার উপরে) -->
     <div class="video-wrapper">
         <div id="loader"></div>
         <video id="video" controls playsinline poster="{{file_thumb}}"></video>
     </div>
 
+    <!-- প্রিমিয়াম ইনফো বক্স (স্ট্রিমের ঠিক নিচে) -->
+    <div class="premium-info-box">
+        <div class="file-name-title">{{file_name}}</div>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <span>Quality</span>
+                <p>Full HD / 4K</p>
+            </div>
+            <div class="meta-item">
+                <span>File Size</span>
+                <p>{{file_size}}</p>
+            </div>
+            <div class="meta-item">
+                <span>Language</span>
+                <p>Dual Audio / Multi</p>
+            </div>
+            <div class="meta-item">
+                <span>Status</span>
+                <p>Premium Stream</p>
+            </div>
+        </div>
+    </div>
+
     <!-- বাটন সেকশন -->
-    <div class="btn-container">
-        <!-- অনলাইন প্লেয়ার (পাশাপাশি) -->
-        <div class="player-row">
-            <a href="intent:{{file_url}}#Intent;package=org.videolan.vlc;type=video/*;end" class="btn vlc">
+    <div class="btn-group">
+        <div class="row">
+            <a href="intent:{{file_url}}#Intent;package=org.videolan.vlc;type=video/*;end" class="premium-btn vlc">
                 <i>🚀</i> VLC Play
             </a>
-            <a href="intent:{{file_url}}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end" class="btn mx">
+            <a href="intent:{{file_url}}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end" class="premium-btn mx">
                 <i>⚡</i> MX Play
             </a>
         </div>
 
-        <!-- প্রিমিয়াম ডাউনলোড বাটন -->
-        <a href="{{file_url}}" download="{{file_name}}" class="btn download-btn">
+        <a href="{{file_url}}" download="{{file_name}}" class="premium-btn download">
             <i>📥</i> Download High Speed
         </a>
 
-        <!-- টেলিগ্রাম -->
-        <a href="https://t.me/moviebackupbd2025" class="btn tg">
-            <i>📢</i> Join Main Channel
+        <a href="https://t.me/moviebackupbd2025" class="premium-btn telegram">
+            <i>📢</i> Join Telegram Channel
         </a>
-        <a href="https://t.me/yabotz" class="btn tg">
-            <i>🛠️</i> Contact Developer
+
+        <a href="https://t.me/yabotz" class="premium-btn developer">
+            <i>🛠️</i> Developer Channel
         </a>
     </div>
 
-    <!-- বিজ্ঞাপন ২ -->
-    <div class="ad-box">
+    <div class="footer">Powered by <span style="color: var(--accent-color);">ya Botz</span></div>
+
+    <!-- বিজ্ঞাপন সেকশন (একেবারে নিচে সিরিয়াল করা) -->
+    <div class="ad-container">
+        <div class="ad-label">Sponsored Ads</div>
+        
+        <!-- Native Banner -->
+        <div class="native-box">
+            <script
+  async="async"
+  data-cfasync="false"
+  src="https://pl27044458.effectivegatecpm.com/743ad090edb739a81c3443d42766558b/invoke.js"
+></script>
+<div id="container-743ad090edb739a81c3443d42766558b"></div>
+        </div>
+
+        <!-- Popunder Script -->
+        <script
+  type="text/javascript"
+  src="https://pl21423250.effectivegatecpm.com/1d/c3/f8/1dc3f8acdb14ff956d47dfdf409aaeeb.js"
+></script>
+
+        <!-- Social Bar Script -->
         <script
   type="text/javascript"
   src="https://pl21423193.effectivegatecpm.com/a2/93/c4/a293c499a899d218d75e263d1d1cf6db.js"
 ></script>
     </div>
 
-    <div class="footer">Powered by <span style="color: var(--accent-color);">ya Botz</span></div>
 </div>
 
-<!-- পপ-আন্ডার -->
-<script
-  async="async"
-  data-cfasync="false"
-  src="https://pl27044458.effectivegatecpm.com/743ad090edb739a81c3443d42766558b/invoke.js"
-></script>
-<div id="container-743ad090edb739a81c3443d42766558b"></div>
-
-<!-- HLS Script -->
+<!-- Player Logic -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
-
 <script>
     var video = document.getElementById('video');
     var videoSrc = "{{file_url}}";
@@ -265,11 +305,7 @@
     showLoader();
 
     if (Hls.isSupported() && videoSrc.includes('.m3u8')) {
-        var hls = new Hls({
-            autoStartLoad: true,
-            maxBufferLength: 30,
-            maxMaxBufferLength: 60,
-        });
+        var hls = new Hls({ autoStartLoad: true, maxBufferLength: 30 });
         hls.loadSource(videoSrc);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, hideLoader);
