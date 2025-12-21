@@ -7,21 +7,24 @@
 
 <style>
     :root {
-        --bg-color: #0d0d0d;
-        --card-bg: #1c1c1c;
-        --text-color: #ffffff;
-        --btn-vlc: #e67e22;
-        --btn-mx: #2980b9;
-        --btn-dl: #27ae60; /* ডাউনলোডের জন্য গাঢ় সবুজ */
-        --btn-tg: #3498db;
+        --bg-color: #080a0f;
+        --card-bg: rgba(28, 28, 35, 0.8);
+        --text-color: #f0f0f0;
+        --accent-color: #00d2ff;
+        --btn-vlc: linear-gradient(135deg, #FF8C00, #e67e22);
+        --btn-mx: linear-gradient(135deg, #00c6ff, #0072ff);
+        --btn-dl: linear-gradient(135deg, #2ecc71, #27ae60);
+        --btn-tg: linear-gradient(135deg, #3498db, #2980b9);
+        --glass-border: rgba(255, 255, 255, 0.1);
     }
 
     body {
         background-color: var(--bg-color);
+        background-image: radial-gradient(circle at top right, #1a1e2e, #080a0f);
         color: var(--text-color);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         margin: 0;
-        padding: 10px;
+        padding: 15px;
         display: flex;
         justify-content: center;
         min-height: 100vh;
@@ -29,113 +32,156 @@
 
     .container {
         width: 100%;
-        max-width: 600px;
+        max-width: 550px;
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 20px;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     h2 {
-        font-size: 16px;
-        color: #ddd;
-        margin: 5px 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #fff;
+        margin: 10px 0;
         text-align: center;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     
-    /* ভিডিও প্লেয়ার */
+    /* প্রিমিয়াম ভিডিও প্লেয়ার */
     .video-wrapper {
         position: relative;
         width: 100%;
         aspect-ratio: 16/9;
         background: #000;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         overflow: hidden;
-        border: 1px solid #333;
+        border: 1px solid var(--glass-border);
     }
     
     video { width: 100%; height: 100%; object-fit: contain; }
 
-    /* লোডার */
+    /* মডার্ন লোডার */
     #loader {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 45px;
-        height: 45px;
-        border: 4px solid rgba(255,255,255,0.1);
-        border-top: 4px solid var(--btn-mx);
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(0, 210, 255, 0.1);
+        border-top: 3px solid var(--accent-color);
         border-radius: 50%;
-        animation: spin 0.8s linear infinite;
+        animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
         display: none;
-        pointer-events: none;
         z-index: 10;
     }
     @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
     
-    /* বাটন কন্টেইনার */
+    /* বাটন স্টাইল */
     .btn-container {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
     }
 
-    /* প্লেয়ার বাটনের সারি */
     .player-row {
         display: flex;
-        gap: 10px;
+        gap: 12px;
     }
 
     .btn {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 14px;
-        border-radius: 8px;
+        padding: 15px;
+        border-radius: 12px;
         text-decoration: none;
         color: #fff;
-        font-weight: bold;
+        font-weight: 600;
         font-size: 15px;
-        border: none;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        position: relative;
+        overflow: hidden;
     }
     
-    .btn:active { transform: scale(0.97); }
-    .btn i { margin-right: 8px; font-style: normal; font-size: 18px; }
+    .btn::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+    }
 
+    .btn:hover::after { left: 100%; }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        filter: brightness(1.1);
+    }
+
+    .btn:active { transform: translateY(0); }
+    .btn i { margin-right: 10px; font-style: normal; font-size: 20px; }
+
+    /* আলাদা আলাদা কালার */
     .vlc { background: var(--btn-vlc); flex: 1; }
     .mx { background: var(--btn-mx); flex: 1; }
     
-    /* প্রধান ডাউনলোড বাটন */
     .download-btn {
         background: var(--btn-dl);
         width: 100%;
         font-size: 16px;
-        padding: 15px;
-        box-sizing: border-box;
-        border-bottom: 4px solid #1e8449; /* 3D effect */
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-top: 5px;
     }
     
-    .tg { background: var(--btn-tg); width: 100%; box-sizing: border-box; margin-top: 5px; }
+    .tg { 
+        background: var(--btn-tg); 
+        width: 100%; 
+        font-size: 14px;
+        opacity: 0.9;
+    }
 
-    /* বিজ্ঞাপন */
+    /* বিজ্ঞাপন বক্স */
     .ad-box { 
         width: 100%;
-        background: transparent;
-        border-radius: 5px; 
-        min-height: 50px; 
+        background: rgba(255,255,255,0.03);
+        border-radius: 12px; 
+        min-height: 60px; 
         display: flex; 
         justify-content: center; 
         align-items: center;
         overflow: hidden;
+        border: 1px dashed var(--glass-border);
     }
     
-    .footer { font-size: 11px; color: #555; margin-top: 15px; text-align: center; }
+    .footer { 
+        font-size: 12px; 
+        color: #666; 
+        margin-top: 20px; 
+        text-align: center; 
+        letter-spacing: 1px;
+    }
+
+    /* মোবাইল অপ্টিমাইজেশন */
+    @media (max-width: 400px) {
+        .btn { padding: 12px; font-size: 14px; }
+        h2 { font-size: 15px; }
+    }
 </style>
 </head>
 <body>
@@ -145,7 +191,10 @@
 
     <!-- বিজ্ঞাপন ১ -->
     <div class="ad-box">
-        <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
+         <script
+  type="text/javascript"
+  src="https://pl21423250.effectivegatecpm.com/1d/c3/f8/1dc3f8acdb14ff956d47dfdf409aaeeb.js"
+></script>
     </div>
 
     <!-- ভিডিও প্লেয়ার -->
@@ -166,20 +215,38 @@
             </a>
         </div>
 
-    <!-- টেলিগ্রাম -->
-    <a href="https://t.me/+J4SmKjWRDqpjY2Nl" class="btn tg">📢 Join Main Channel</a>
-        <a href="https://t.me/yabotz" class="btn tg">📢 Developer Channel</a>
+        <!-- প্রিমিয়াম ডাউনলোড বাটন -->
+        <a href="{{file_url}}" download="{{file_name}}" class="btn download-btn">
+            <i>📥</i> Download High Speed
+        </a>
+
+        <!-- টেলিগ্রাম -->
+        <a href="https://t.me/moviebackupbd2025" class="btn tg">
+            <i>📢</i> Join Main Channel
+        </a>
+        <a href="https://t.me/yabotz" class="btn tg">
+            <i>🛠️</i> Contact Developer
+        </a>
+    </div>
 
     <!-- বিজ্ঞাপন ২ -->
     <div class="ad-box">
-        <script type="text/javascript" src="//pl27974267.effectivegatecpm.com/72/92/c4/7292c40715a3a7347cbc4f26df859499.js"></script>
+        <script
+  type="text/javascript"
+  src="https://pl21423193.effectivegatecpm.com/a2/93/c4/a293c499a899d218d75e263d1d1cf6db.js"
+></script>
     </div>
 
-    <div class="footer">Powered by ya Botz</div>
+    <div class="footer">Powered by <span style="color: var(--accent-color);">ya Botz</span></div>
 </div>
 
 <!-- পপ-আন্ডার -->
-<script type="text/javascript" src="//pl27974255.effectivegatecpm.com/fb/97/40/fb9740bececcc7766d98eaa666b7f399.js"></script>
+<script
+  async="async"
+  data-cfasync="false"
+  src="https://pl27044458.effectivegatecpm.com/743ad090edb739a81c3443d42766558b/invoke.js"
+></script>
+<div id="container-743ad090edb739a81c3443d42766558b"></div>
 
 <!-- HLS Script -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
@@ -214,4 +281,3 @@
 
 </body>
 </html>
-
