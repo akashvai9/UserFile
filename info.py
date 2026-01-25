@@ -43,8 +43,8 @@ PUBLIC_FILE_STORE = environ.get('PUBLIC_FILE_STORE', True)  # Public or private 
 BATCH_PROTECT_CONTENT = environ.get('BATCH_PROTECT_CONTENT', False)  # Batch file protection
 
 # 🔗 Shortlink Configuration
-SHORTLINK_URL = environ.get('SHORTLINK_URL', 'urlbotsot.vercel.app')  # Shortener site
-SHORTLINK_API = environ.get('SHORTLINK_API', 'akashdeveloper')  # API key for shortlink
+SHORTLINK_URL = environ.get('SHORTLINK_URL', 'shortincome.vercel.app')  # Shortener site
+SHORTLINK_API = environ.get('SHORTLINK_API', 'rrnrb1e95oc49y050v9h6deoho4xvmfkldi2th5o')  # API key for shortlink
 
 # 💾 MongoDB Connection Information
 DB_URL = environ.get('DATABASE_URI', "mongodb+srv://fojidod567_db_user:xMHrCrpl4n0dcuDL@cluster0.buet82m.mongodb.net/?appName=Cluster0")  # MongoDB connection URI
